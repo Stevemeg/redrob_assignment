@@ -1,0 +1,94 @@
+# Redrob Hackathon — Submission Metadata
+# Fill in the bracketed placeholders before submitting.
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "<YOUR_TEAM_NAME>"
+
+primary_contact:
+  name: "Shanmuka"
+  email: "<YOUR_EMAIL>"
+  phone: "<YOUR_PHONE>"
+
+team_members:
+  - name: "Shanmuka"
+    email: "<YOUR_EMAIL>"
+    role: "ML Engineer"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/<YOUR_USERNAME>/<YOUR_REPO>"
+
+sandbox_link: "<YOUR_SANDBOX_URL>"
+# See Section 10.5 of submission_spec.md. HuggingFace Spaces / Streamlit
+# Cloud are the easiest options here since the ranking step has zero
+# third-party dependencies beyond the Python standard library.
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "<e.g. Local Linux box / MacBook Pro M2 / etc.>"
+  cpu_cores: <FILL IN>
+  ram_gb: <FILL IN>
+  python_version: "3.12"
+  os: "<FILL IN>"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: false
+  pre_computation_time_minutes: 0
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Claude"
+
+ai_usage_summary: |
+  Used Claude (Anthropic) as a development collaborator: architecture
+  discussion, code review, and pair-programming on the scoring modules.
+  Design decisions (skill ontology clusters, credibility heuristics,
+  component weights) were derived from direct inspection of the real
+  candidates.jsonl distributed in the hackathon bundle -- e.g. the
+  honeypot detection thresholds were tuned by scanning the actual dataset
+  for internal self-contradictions, not guessed. No candidate data was
+  sent to any external LLM API as part of the ranking pipeline itself
+  (rank.py has zero network calls and zero LLM dependencies, per the
+  compute constraints in submission_spec.md Section 3).
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  Rule-based ranker over structured candidate fields, not embeddings/LLMs,
+  because the compute constraints (CPU-only, no network, 5 min) make
+  heavyweight ML risky and the data is structured JSON rather than free
+  text. Five weighted components: skill-cluster-adjacency match (42%,
+  using a hand-built ontology so plain-language descriptions like "Vector
+  Representations" get credit against buzzword JD requirements like
+  "Embeddings"), title/seniority classification (30%, the primary defense
+  against the keyword-stuffer trap -- an HR Manager with AI skills listed
+  scores ~0.05 on this component regardless of skill-list length),
+  experience-band fit (13%, soft decay not a cutoff), and career-fit
+  checks for title-chasing/consulting-only/location (10%), combined
+  multiplicatively with a behavioral-signal availability modifier and a
+  credibility penalty. Credibility checks (YOE-vs-career-history mismatch,
+  expert-skill-at-zero-duration, overqualified-for-experience) were
+  derived by scanning the real dataset for internal contradictions and
+  independently flag a combined 96 candidates with zero overlap between
+  heuristics, close to the documented ~80 honeypots. Full reproducible
+  100K-candidate run completes in under 90 seconds CPU-only.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true

@@ -1,0 +1,11 @@
+# Core ranking pipeline (rank.py + src/) has ZERO third-party dependencies --
+# it's pure Python standard library (json, csv, heapq, gzip, argparse,
+# dataclasses, datetime, math). This is intentional: the compute constraints
+# (no network, CPU-only, 5 min) are easiest to guarantee with the smallest
+# possible dependency surface, and a stdlib-only ranking step can never fail
+# Stage 3 reproduction due to a missing/incompatible package.
+#
+# scikit-learn is ONLY needed for eval/baseline_tfidf.py (the TF-IDF
+# baseline used in offline evaluation/comparison -- see eval/run_eval.py).
+# It is NOT imported anywhere in the submission's ranking path (rank.py).
+scikit-learn==1.8.0
