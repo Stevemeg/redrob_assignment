@@ -1,4 +1,4 @@
-# Redrob Hackathon — Candidate Ranker
+# Redrob Challenge — Candidate Ranker
 
 Ranks the 100,000-candidate pool against the "Senior AI Engineer — Founding
 Team" job description and produces the top-100 submission CSV.
